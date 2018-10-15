@@ -1,0 +1,18 @@
+# eclipse
+target
+.settings
+.classpath
+.project
+.apt_generated
+.apt_generated_tests
+.factorypath
+.springBeans
+.gradle
+pom.xml
+build/
+bin/
+logs/
+# idear
+.externalToolBuilders
+.idea
+*.iml

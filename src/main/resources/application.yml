@@ -1,0 +1,35 @@
+# 本配置文件修改名称为application-dev.yml存放于gitlab上， 路径: git配置仓库/datahub-template/application-dev.yml 
+server:
+  port: 8080
+spring:
+  datasource:
+    name: mysql-datasource
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      register-mbeans: true
+      pool-name: hikari-pool
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://10.12.51.107:3306/datahub_template?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+      username: qhuser
+      password: bo28$s1d3a
+
+# hystrix 必须加否则无效(默认false)
+feign: 
+  hystrix:
+    enabled: true
+  client:
+    config:
+      datahub-repository:
+        connectTimeout: 3000
+        readTimeout: 3000
+        loggerLevel: basic
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          strategy: THREAD
+          thread:
+            timeoutInMilliseconds: 5000

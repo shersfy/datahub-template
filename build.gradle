@@ -1,0 +1,75 @@
+buildscript {
+	// 属性定义，相当于maven的properties
+	ext {
+		springBootVersion = '2.0.4.RELEASE'
+		repoBase = "http://10.12.40.166:8081/nexus/content"
+	}
+	// gradle自身资源引用仓库
+	repositories {
+		maven {url "${repoBase}/groups/public" }
+		maven {url "https://plugins.gradle.org/m2/"}
+		mavenCentral()
+	}
+	// gradle自身必要的依赖
+	dependencies {
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.0.RELEASE"
+	}
+}
+
+// 项目资源仓库
+repositories {
+	maven { url "${repoBase}/groups/public" }
+	mavenCentral()
+}
+
+// 项目坐标
+group = 'com.datahub'
+version = '1.0.1'
+def artifactId = "datahub-template"
+
+// 使用到的插件
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+sourceCompatibility = 1.8
+
+// spring cloud依赖
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Finchley.SR1"
+	}
+}
+
+// 依赖 分类空行
+dependencies {
+	// datahub模块间依赖, 需要先发布到nexus仓库
+	compile "com.datahub:datahub-commons:${project.version}"
+	
+	// 第三方jar依赖, maven仓库中没有, 需要手动发布到maven仓库
+	compile "com.datahub:ojdbc6:6"
+	compile "com.datahub:chardet:1.0"
+	compile "com.datahub:cpdetector:1.0.10"
+	
+	// spring-boot依赖
+	compile "org.springframework.boot:spring-boot-starter"
+	compile "org.springframework.boot:spring-boot-starter-web"
+	compile "org.springframework.boot:spring-boot-autoconfigure"
+	compile "org.springframework.boot:spring-boot-starter-jdbc"
+	compile "org.springframework.boot:spring-boot-starter-data-mongodb"
+	compile "org.springframework.boot:spring-boot-starter-data-redis"
+	
+	// spring-cloud依赖
+	compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+	compile "org.springframework.cloud:spring-cloud-starter-config"
+	compile "org.springframework.cloud:spring-cloud-starter-openfeign"
+	
+	// 其他依赖
+	compile "org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2"
+	compile "mysql:mysql-connector-java"
+	compile "com.alibaba:fastjson:1.2.49"
+	
+	// junit
+	testCompile "junit:junit:4.12"
+}

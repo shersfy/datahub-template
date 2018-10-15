@@ -1,0 +1,34 @@
+# ------start-------
+spring:
+  application:
+    name: datahub-template
+  main:
+    banner-mode: 'off'
+  jmx:
+    enabled: false
+  cloud:
+    loadbalancer:
+      retry:
+        enabled: true
+    config:
+      name: ${spring.application.name}
+      profile: dev
+      label: master
+      discovery:
+        enabled: true
+        service-id: datahub-config
+# eureka
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://datahub.eureka.node1.com:8761/eureka/, http://datahub.eureka.node2.com:8761/eureka/, http://datahub.eureka.node3.com:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-renewal-interval-in-seconds: 1
+    lease-expiration-duration-in-seconds: 3
+# ------end------- 
+# mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.datahub.template.model
